@@ -1,6 +1,7 @@
 const { google } = require("googleapis");
 const path = require("path");
 const fs = require("fs");
+const stream = require('stream');
 
 const CLIENT_ID = '44659227801-eo7qhobi7uj5b8jpjjvht2uuqf1fsl4a.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
@@ -21,7 +22,10 @@ const drive = google.drive({
 
 const uploadFile =  async function fileUpload(file)
 {
-    const filePath = file.path;
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(file.buffer);
+    
+    // const filePath = file.path;
     console.log("file uploading.."+ file.originalname);
     try{
         const response = await drive.files.create({
@@ -31,7 +35,7 @@ const uploadFile =  async function fileUpload(file)
             },
             media: {
                 mimeType: file.mimetye,
-                body: fs.createReadStream(filePath)
+                body: bufferStream
             }
         });
         console.log("Uploaded...");
