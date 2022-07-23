@@ -8,8 +8,10 @@ const maxSize = 2 * 1024 * 1024
 const upload = multer();
 
 let routes = (app) => {
-  router.post("/upload", upload.single('file'), controller.upload);
-  app.use(router);
+  router.post("/upload", upload.array('files'), controller.upload);
+  // router.get("/", function(req, res) {
+  //   res.sendFile('../public/index.html', {root: __dirname })});
+  // app.use(router);
 };
 
 module.exports = routes;
